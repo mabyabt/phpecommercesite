@@ -20,7 +20,7 @@ $dbname = "ecommerce_db";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
-if ($conn -> connect_error) {
+if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
@@ -33,18 +33,21 @@ if ($result->num_rows > 0) {
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>active</th>
+                <th>Status</th>
             </tr>";
     
     // Output data of each row
     while($row = $result->fetch_assoc()) {
-        if($row['is_active'] == 1){
-        echo "<tr>
-                <td>" . $row["id"] . "</td>
-                <td>" . $row["name"] . "</td>
-                <td>" . $row["is_active"] . "</td>
-              </tr>";
-    }else{ }}
+        if ($row['is_active'] == 1) {
+            // Create a link to the items list page
+            $category_name = htmlspecialchars($row["name"]);
+            echo "<tr>
+                    <td>" . $row["id"] . "</td>
+                    <td><a href='items.php?category=" . urlencode($category_name) . "'>" . $row["name"] . "</a></td>
+                    <td>" . $row["is_active"] . "</td>
+                  </tr>";
+        }
+    }
     echo "</table>";
 } else {
     echo "0 results";
@@ -53,6 +56,13 @@ if ($result->num_rows > 0) {
 // Close connection
 $conn->close();
 ?>
+<!-- Floating Cart HTML -->
+<div id="floating-cart">
+    <h3>Cart</h3>
+    <p>Your cart is empty.</p>
+    <button onclick="window.location.href='cart.php'">View Cart</button>
+</div>
+
 
 </body>
 </html>
